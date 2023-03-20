@@ -1,0 +1,29 @@
+name: Verify Docker Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  verify-image:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the repository
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t myimage .
+
+      # Run Checkov on the Docker image
+      - name: Run Checkov on Docker image
+        run: |
+          docker run -v $(pwd):/src -w /src myimage checkov --input_path=.
+
+      # Check the exit code of Checkov to determine success or failure
+      - name: Check exit code
+        if: always()
+        run: exit ${{ steps.run-checkov.outputs.exit-code }}
