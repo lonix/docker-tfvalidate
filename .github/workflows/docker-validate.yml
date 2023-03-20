@@ -2,8 +2,6 @@ name: Verify Docker Image
 
 on:
   push:
-    branches:
-      - master
 
 jobs:
   verify-image:
