@@ -18,6 +18,13 @@ jobs:
         run: |
           docker build -t myimage .
 
+      # Validate versions
+      - name: Validate versions
+        run: |
+          docker run -v $(pwd):/src -w /src myimage checkov --version
+          docker run -v $(pwd):/src -w /src myimage terraform --version
+          docker run -v $(pwd):/src -w /src myimage terraform-docs --version
+
       # Run Checkov on the Docker image
       - name: Run Checkov on Docker image
         run: |
